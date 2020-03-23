@@ -215,7 +215,7 @@ describe('lobby', () => {
           .find('LobbyCreateRoomForm')
           .find('button')
           .simulate('click');
-        expect(spy).toHaveBeenCalledWith('GameName1', 3);
+        expect(spy).toHaveBeenCalledWith('GameName1', 3, '', '');
       });
       test('room with 2 players', () => {
         lobby.instance().connection.create = spy;
@@ -235,7 +235,7 @@ describe('lobby', () => {
           .find('LobbyCreateRoomForm')
           .find('button')
           .simulate('click');
-        expect(spy).toHaveBeenCalledWith('GameName2', 2);
+        expect(spy).toHaveBeenCalledWith('GameName2', 2, '', '');
       });
       test('when server request fails', async () => {
         lobby.instance().connection.create = spy.mockImplementation(() => {
@@ -304,7 +304,7 @@ describe('lobby', () => {
           .first()
           .find('button')
           .simulate('click');
-        expect(spy).toHaveBeenCalledWith('GameName1', 'gameID1', '0');
+        expect(spy).toHaveBeenCalledWith('GameName1', 'gameID1', '0', '');
       });
       test('when room is full', () => {
         // try 2nd room
