@@ -32,6 +32,8 @@ const LobbyView = () => (
       gameServer={`http://${hostname}:8000`}
       lobbyServer={`http://${hostname}:8000`}
       gameComponents={importedGames}
+      enableRoomKeys={true}
+      enableRoomNames={true}
     />
   </div>
 );

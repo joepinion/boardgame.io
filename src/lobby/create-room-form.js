@@ -13,11 +13,15 @@ class LobbyCreateRoomForm extends React.Component {
   static propTypes = {
     games: PropTypes.array.isRequired,
     createGame: PropTypes.func.isRequired,
+    enableRoomName: PropTypes.bool,
+    enableRoomKey: PropTypes.bool,
   };
 
   state = {
     selectedGame: 0,
     numPlayers: 2,
+    roomName: '',
+    roomKey: '',
   };
 
   constructor(props) {
@@ -36,6 +40,8 @@ class LobbyCreateRoomForm extends React.Component {
     this.state = {
       selectedGame: 0,
       numPlayers: props.games[0].game.minPlayers,
+      roomName: '',
+      roomKey: '',
     };
   }
 
@@ -77,6 +83,27 @@ class LobbyCreateRoomForm extends React.Component {
             this.props.games[this.state.selectedGame].game
           ).map(this._createNumPlayersOption)}
         </select>
+        {this.props.enableRoomName ? (
+          <span>
+            <span>Room Name:</span>
+            <input
+              type="text"
+              value={this.state.roomName}
+              onChange={this.onChangeRoomName}
+              maxLength="15"
+            />
+          </span>
+        ) : null}
+        {this.props.enableRoomKey ? (
+          <span>
+            <span>Room Key:</span>
+            <input
+              value={this.state.roomKey}
+              onChange={this.onChangeRoomKey}
+              maxLength="15"
+            />
+          </span>
+        ) : null}
         <span className="buttons">
           <button onClick={this.onClickCreate}>Create</button>
         </span>
@@ -98,11 +125,28 @@ class LobbyCreateRoomForm extends React.Component {
     });
   };
 
+  onChangeRoomName = event => {
+    const name = event.target.value.trim();
+    this.setState({
+      roomName: name,
+    });
+  };
+
+  onChangeRoomKey = event => {
+    const key = event.target.value.trim();
+    this.setState({
+      roomKey: key,
+    });
+  };
+
   onClickCreate = () => {
     this.props.createGame(
       this.props.games[this.state.selectedGame].game.name,
-      this.state.numPlayers
+      this.state.numPlayers,
+      this.state.roomName,
+      this.state.roomKey
     );
+    this.setState({ roomName: '', roomKey: '' });
   };
 }
 

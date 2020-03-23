@@ -15,6 +15,8 @@ class LobbyRoomInstance extends React.Component {
       gameName: PropTypes.string.isRequired,
       gameID: PropTypes.string.isRequired,
       players: PropTypes.array.isRequired,
+      roomName: PropTypes.string,
+      haskey: PropTypes.bool,
     }),
     playerName: PropTypes.string.isRequired,
     onClickJoin: PropTypes.func.isRequired,
@@ -22,15 +24,44 @@ class LobbyRoomInstance extends React.Component {
     onClickPlay: PropTypes.func.isRequired,
   };
 
+  constructor(props) {
+    super(props);
+    this.state = {
+      roomKey: '',
+    };
+  }
+
   _createSeat = player => {
     return player.name || '[free]';
   };
+
+  _createRoomKeyInput = gameID => (
+    <span>
+      <span>Room Key:</span>
+      <input
+        type="password"
+        key={'input-roomkey-' + gameID}
+        value={this.state.roomKey}
+        onChange={this.onChangeRoomKey}
+      />
+    </span>
+  );
+
+  _prepJoin(gameName, gameID, seatId, roomKey) {
+    this.setState({ roomKey: '' });
+    this.props.onClickJoin(gameName, gameID, seatId, roomKey);
+  }
 
   _createButtonJoin = (inst, seatId) => (
     <button
       key={'button-join-' + inst.gameID}
       onClick={() =>
-        this.props.onClickJoin(inst.gameName, inst.gameID, '' + seatId)
+        this._prepJoin(
+          inst.gameName,
+          inst.gameID,
+          '' + seatId,
+          this.state.roomKey
+        )
       }
     >
       Join
@@ -112,6 +143,9 @@ class LobbyRoomInstance extends React.Component {
     return (
       <tr key={'line-' + room.gameID}>
         <td key={'cell-name-' + room.gameID}>{room.gameName}</td>
+        {this.props.enableRoomName === true ? (
+          <td key={'cell-room-name-' + room.gameID}>{room.roomName}</td>
+        ) : null}
         <td key={'cell-status-' + room.gameID}>{status}</td>
         <td key={'cell-seats-' + room.gameID}>
           {room.players.map(this._createSeat).join(', ')}
@@ -119,9 +153,20 @@ class LobbyRoomInstance extends React.Component {
         <td key={'cell-buttons-' + room.gameID}>
           {this._createInstanceButtons(room)}
         </td>
+        <td key={'cell-key-' + room.gameID}>
+          {room.hasKey === true && room.players.find(player => !player.name)
+            ? this._createRoomKeyInput(room.gameID)
+            : null}
+        </td>
       </tr>
     );
   }
+
+  onChangeRoomKey = event => {
+    this.setState({
+      roomKey: event.target.value,
+    });
+  };
 }
 
 export default LobbyRoomInstance;

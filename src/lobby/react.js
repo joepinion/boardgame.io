@@ -49,6 +49,8 @@ class Lobby extends React.Component {
     debug: PropTypes.bool,
     clientFactory: PropTypes.func,
     refreshInterval: PropTypes.number,
+    enableRoomNames: PropTypes.bool,
+    enableRoomKeys: PropTypes.bool,
   };
 
   static defaultProps = {
@@ -135,9 +137,9 @@ class Lobby extends React.Component {
     this.setState({ phase: LobbyPhases.ENTER, errorMsg: '' });
   };
 
-  _createRoom = async (gameName, numPlayers) => {
+  _createRoom = async (gameName, numPlayers, roomName, roomKey) => {
     try {
-      await this.connection.create(gameName, numPlayers);
+      await this.connection.create(gameName, numPlayers, roomName, roomKey);
       await this.connection.refresh();
       // rerender
       this.setState({});
@@ -146,9 +148,9 @@ class Lobby extends React.Component {
     }
   };
 
-  _joinRoom = async (gameName, gameID, playerID) => {
+  _joinRoom = async (gameName, gameID, playerID, roomKey) => {
     try {
-      await this.connection.join(gameName, gameID, playerID);
+      await this.connection.join(gameName, gameID, playerID, roomKey);
       await this.connection.refresh();
       this._updateCredentials(
         this.connection.playerName,
@@ -226,15 +228,22 @@ class Lobby extends React.Component {
 
   renderRooms = (rooms, playerName) => {
     return rooms.map(room => {
-      const { gameID, gameName, players } = room;
+      const { gameID, gameName, players, roomName, hasKey } = room;
       return (
         <LobbyRoomInstance
           key={'instance-' + gameID}
-          room={{ gameID, gameName, players: Object.values(players) }}
+          room={{
+            gameID,
+            gameName,
+            players: Object.values(players),
+            roomName,
+            hasKey,
+          }}
           playerName={playerName}
           onClickJoin={this._joinRoom}
           onClickLeave={this._leaveRoom}
           onClickPlay={this._startGame}
+          enableRoomName={this.props.enableRoomNames}
         />
       );
     });
@@ -281,6 +290,8 @@ class Lobby extends React.Component {
             <LobbyCreateRoomForm
               games={gameComponents}
               createGame={this._createRoom}
+              enableRoomName={this.props.enableRoomNames}
+              enableRoomKey={this.props.enableRoomKeys}
             />
           </div>
           <p className="phase-title">Join a room:</p>

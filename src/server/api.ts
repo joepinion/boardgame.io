@@ -21,6 +21,8 @@ const getNamespacedGameID = (gameID: string, gameName: string) =>
 const createGameMetadata = () => ({
   players: {},
   setupData: {},
+  roomName: '',
+  roomKey: '',
 });
 
 const GameMetadataKey = (gameID: string) => `${gameID}:metadata`;
@@ -39,6 +41,8 @@ export const CreateGame = async (
   db,
   game,
   numPlayers,
+  roomName,
+  roomKey,
   setupData,
   lobbyConfig
 ) => {
@@ -55,6 +59,8 @@ export const CreateGame = async (
   }
 
   gameMetadata.setupData = setupData;
+  gameMetadata.roomName = roomName;
+  gameMetadata.roomKey = roomKey;
 
   const gameID = lobbyConfig.uuid();
   const namespacedGameID = getNamespacedGameID(gameID, game.name);
@@ -104,12 +110,16 @@ export const addApiToServer = ({
     if (!numPlayers) {
       numPlayers = 2;
     }
+    const roomName = ctx.request.body.roomName;
+    const roomKey = ctx.request.body.roomKey;
 
     const game = games.find(g => g.name === gameName);
     const gameID = await CreateGame(
       db,
       game,
       numPlayers,
+      roomName,
+      roomKey,
       setupData,
       lobbyConfig
     );
@@ -137,6 +147,8 @@ export const addApiToServer = ({
             return { id: player.id, name: player.name };
           }),
           setupData: metadata.setupData,
+          roomName: metadata.roomName,
+          hasKey: metadata.roomKey && metadata.roomKey !== '' ? true : false,
         });
       }
     }
@@ -165,6 +177,7 @@ export const addApiToServer = ({
   router.post('/games/:name/:id/join', koaBody(), async ctx => {
     const playerID = ctx.request.body.playerID;
     const playerName = ctx.request.body.playerName;
+    const roomKey = ctx.request.body.roomKey;
     if (typeof playerID === 'undefined' || playerID === null) {
       ctx.throw(403, 'playerID is required');
     }
@@ -183,6 +196,13 @@ export const addApiToServer = ({
     }
     if (gameMetadata.players[playerID].name) {
       ctx.throw(409, 'Player ' + playerID + ' not available');
+    }
+    if (
+      gameMetadata.roomKey &&
+      gameMetadata.roomKey !== '' &&
+      roomKey !== gameMetadata.roomKey
+    ) {
+      ctx.throw(401, 'Room key incorrect for room ' + roomID);
     }
 
     gameMetadata.players[playerID].name = playerName;
@@ -269,6 +289,8 @@ export const addApiToServer = ({
       db,
       game,
       numPlayers,
+      gameMetadata.roomName + ' continued',
+      gameMetadata.roomKey,
       setupData,
       lobbyConfig
     );

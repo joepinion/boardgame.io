@@ -59,7 +59,7 @@ class _LobbyConnectionImpl {
     }
   }
 
-  async join(gameName, gameID, playerID) {
+  async join(gameName, gameID, playerID, roomKey) {
     try {
       let inst = this._findPlayer(this.playerName);
       if (inst) {
@@ -76,6 +76,7 @@ class _LobbyConnectionImpl {
           body: JSON.stringify({
             playerID: playerID,
             playerName: this.playerName,
+            roomKey: roomKey,
           }),
           headers: { 'Content-Type': 'application/json' },
         }
@@ -129,7 +130,7 @@ class _LobbyConnectionImpl {
     this.playerName = 'Visitor';
   }
 
-  async create(gameName, numPlayers) {
+  async create(gameName, numPlayers, roomName, roomKey) {
     try {
       const comp = this._getGameComponents(gameName);
       if (!comp) throw new Error('game not found');
@@ -142,6 +143,8 @@ class _LobbyConnectionImpl {
         method: 'POST',
         body: JSON.stringify({
           numPlayers: numPlayers,
+          roomName: roomName,
+          roomKey: roomKey,
         }),
         headers: { 'Content-Type': 'application/json' },
       });
