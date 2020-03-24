@@ -23,8 +23,6 @@
     "lint": "eslint .",
     "lint:fix": "eslint --fix .",
     "postinstall": "npm run build && node scripts/proxy-dirs.js",
-    "prepublishOnly": "npm run clean",
-    "postpack": "npm run clean",
     "prettier": "prettier --write \"{examples,src,benchmark}/**/*.{ts,js,css,md}\"",
     "changelog": "bash ./scripts/changelog.sh",
     "clean": "node ./scripts/clean.js"
@@ -189,11 +187,5 @@
         "compression": "none"
       }
     ]
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged",
-      "pre-push": "npm run lint && npm run test:coverage"
-    }
   }
 }
