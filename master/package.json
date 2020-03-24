@@ -1,0 +1,6 @@
+{
+  "name": "boardgame.io/master",
+  "private": true,
+  "main": "../dist/cjs/master.js",
+  "module": "../dist/esm/master.js"
+}

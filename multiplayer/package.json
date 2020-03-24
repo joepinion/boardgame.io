@@ -1,0 +1,6 @@
+{
+  "name": "boardgame.io/multiplayer",
+  "private": true,
+  "main": "../dist/cjs/multiplayer.js",
+  "module": "../dist/esm/multiplayer.js"
+}

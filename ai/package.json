@@ -1,0 +1,6 @@
+{
+  "name": "boardgame.io/ai",
+  "private": true,
+  "main": "../dist/cjs/ai.js",
+  "module": "../dist/esm/ai.js"
+}

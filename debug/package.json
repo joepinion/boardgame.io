@@ -1,0 +1,6 @@
+{
+  "name": "boardgame.io/debug",
+  "private": true,
+  "main": "../dist/cjs/debug.js",
+  "module": "../dist/esm/debug.js"
+}
