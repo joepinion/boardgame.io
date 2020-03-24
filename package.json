@@ -22,7 +22,6 @@
     "ts": "tsc --noEmit",
     "lint": "eslint .",
     "lint:fix": "eslint --fix .",
-    "preinstall": "npm install",
     "postinstall": "npm run build && node scripts/proxy-dirs.js",
     "prettier": "prettier --write \"{examples,src,benchmark}/**/*.{ts,js,css,md}\"",
     "changelog": "bash ./scripts/changelog.sh",
