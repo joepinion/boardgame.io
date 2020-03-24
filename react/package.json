@@ -1,6 +1,0 @@
-{
-  "name": "boardgame.io/react",
-  "private": true,
-  "main": "../dist/cjs/react.js",
-  "module": "../dist/esm/react.js"
-}

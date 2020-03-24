@@ -1,6 +1,0 @@
-{
-  "name": "boardgame.io/plugins",
-  "private": true,
-  "main": "../dist/cjs/plugins.js",
-  "module": "../dist/esm/plugins.js"
-}

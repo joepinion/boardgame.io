@@ -1,6 +1,0 @@
-{
-  "name": "boardgame.io/client",
-  "private": true,
-  "main": "../dist/cjs/client.js",
-  "module": "../dist/esm/client.js"
-}

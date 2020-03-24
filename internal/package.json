@@ -1,6 +1,0 @@
-{
-  "name": "boardgame.io/internal",
-  "private": true,
-  "main": "../dist/cjs/internal.js",
-  "module": "../dist/esm/internal.js"
-}
