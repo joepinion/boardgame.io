@@ -146,7 +146,7 @@ class LobbyCreateRoomForm extends React.Component {
       this.state.roomName,
       this.state.roomKey
     );
-    this.setState({ roomName: '', roomKey: '' });
+    this.setState({ roomName: '' });
   };
 }
 

@@ -81,7 +81,13 @@ class _LobbyConnectionImpl {
           headers: { 'Content-Type': 'application/json' },
         }
       );
-      if (resp.status !== 200) throw new Error('HTTP status ' + resp.status);
+      if (resp.status !== 200) {
+        if (resp.status === 401) {
+          throw new Error('Incorrect room key');
+        } else {
+          throw new Error('HTTP status ' + resp.status);
+        }
+      }
       const json = await resp.json();
       inst.players[Number.parseInt(playerID)].name = this.playerName;
       this.playerCredentials = json.playerCredentials;

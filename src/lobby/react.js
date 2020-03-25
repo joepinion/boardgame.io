@@ -51,6 +51,8 @@ class Lobby extends React.Component {
     refreshInterval: PropTypes.number,
     enableRoomNames: PropTypes.bool,
     enableRoomKeys: PropTypes.bool,
+    exitLobbyContent: PropTypes.element,
+    exitGameContent: PropTypes.element,
   };
 
   static defaultProps = {
@@ -139,6 +141,7 @@ class Lobby extends React.Component {
 
   _createRoom = async (gameName, numPlayers, roomName, roomKey) => {
     try {
+      this.setState({ errorMsg: '' });
       await this.connection.create(gameName, numPlayers, roomName, roomKey);
       await this.connection.refresh();
       // rerender
@@ -150,6 +153,7 @@ class Lobby extends React.Component {
 
   _joinRoom = async (gameName, gameID, playerID, roomKey) => {
     try {
+      this.setState({ errorMsg: '' });
       await this.connection.join(gameName, gameID, playerID, roomKey);
       await this.connection.refresh();
       this._updateCredentials(
@@ -163,6 +167,7 @@ class Lobby extends React.Component {
 
   _leaveRoom = async (gameName, gameID) => {
     try {
+      this.setState({ errorMsg: '' });
       await this.connection.leave(gameName, gameID);
       await this.connection.refresh();
       this._updateCredentials(
@@ -175,6 +180,7 @@ class Lobby extends React.Component {
   };
 
   _startGame = (gameName, gameOpts) => {
+    this.setState({ errorMsg: '' });
     const gameCode = this.connection._getGameComponents(gameName);
     if (!gameCode) {
       this.setState({
@@ -320,12 +326,16 @@ class Lobby extends React.Component {
             />
           )}
           <div className="buttons" id="game-exit">
-            <button onClick={this._exitRoom}>Exit game</button>
+            <button onClick={this._exitRoom}>
+              {this.props.exitGameContent || 'Exit game'}
+            </button>
           </div>
         </div>
 
         <div className="buttons" id="lobby-exit">
-          <button onClick={this._exitLobby}>Exit lobby</button>
+          <button onClick={this._exitLobby}>
+            {this.props.exitLobbyContent || 'Exit lobby'}
+          </button>
         </div>
       </div>
     );
