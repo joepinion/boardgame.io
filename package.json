@@ -1,6 +1,6 @@
 {
   "name": "@joepinion/boardgame.io",
-  "version": "0.38.2",
+  "version": "0.38.3",
   "description": "library for turn-based games - forked from nicolodavis/boardgame.io",
   "repository": "https://github.com/joepinion/boardgame.io",
   "scripts": {
